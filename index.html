@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro E-Commerce Site</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero {
+            background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fG1vYmlsZXxlbnwwfHx8fDE2ODI0MjY0MjM&ixlib=rb-4.0.3&q=80&w=1080');
+            background-size: cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .product-card {
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+        .cart-item {
+            margin-bottom: 20px;
+        }
+        .modal-header {
+            border-bottom: none;
+        }
+        .modal-body {
+            background-color: #ffffff; /* White background for the cart modal */
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        .search-box {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Pro E-Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#cartModal">Cart (<span id="cart-count">0</span>)</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Welcome to Pro E-Shop</h1>
+        <p>Your one-stop shop for amazing products!</p>
+        <a href="#products" class="btn btn-primary btn-lg">Shop Now</a>
+    </div>
+
+    <!-- Search Box -->
+    <div class="container search-box">
+        <input type="text" id="search-input" class="form-control" placeholder="Search for products..." onkeyup="filterProducts()">
+    </div>
+
+    <!-- Product Section -->
+    <div class="container my-5" id="products">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row" id="product-list">
+            <!-- Product Card 1 (Smartphone) -->
+            <div class="col-md-4 product-item" data-name=" Smartphone">
+                <div class="card product-card">
+                    <img src="https://th.bing.com/th/id/R.2b2ac1bb5b369a4aea0e5dc1768f10b4?rik=hSgj5g26tkaO7w&pid=ImgRaw&r=0" class="card-img-top" alt="Smartphone">
+                    <div class="card-body">
+                        <h5 class="card-title">Smartphone</h5>
+                        <p class="card-text">Price: $499.99</p>
+                        <label for="quantity-1">Quantity:</label>
+                        <input type="number" id="quantity-1" value="1" min="1" style="width: 60px;">
+                        <button class="btn btn-primary" onclick="addToCart(1, 'Smartphone', 499.99, document.getElementById('quantity-1').value); return false;">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Card 2 (T-Shirt) -->
+            <div class="col-md-4 product-item" data-name="T-Shirt">
+                <div class="card product-card">
+                    <img src="https://th.bing.com/th/id/OIP.zlU_VppiYPbUaXm2rUOJ4AHaHa?rs=1&pid=ImgDetMain" class="card-img-top" alt="T-Shirt">
+                    <div class="card-body">
+                        <h5 class="card-title">T-Shirt</h5>
+                        <p class="card-text">Price: $19.99</p>
+                        <label for="quantity-2">Quantity:</label>
+                        <input type="number" id="quantity-2" value="1" min="1" style="width: 60px;">
+                        <button class="btn btn-primary" onclick="addToCart(2, 'T-Shirt', 19.99, document.getElementById('quantity-2').value); return false;">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Card 3 (Watch) -->
+            <div class="col-md-4 product-item" data-name="Watch">
+                <div class="card product-card">
+                    <img src="https://th.bing.com/th/id/OIP.rKexXlIKRpRi_QJN8Ga1IwHaI2?w=679&h=812&rs=1&pid=ImgDetMain" class="card-img-top" alt="Watch">
+                    <div class="card-body">
+                        <h5 class="card-title">Watch</h5>
+                        <p class="card-text">Price: $199.99</p>
+                        <label for="quantity-3">Quantity:</label>
+                        <input type="number" id="quantity-3" value="1" min="1" style="width: 60px;">
+                        <button class="btn btn-primary" onclick="addToCart(3, 'Watch', 199.99, document.getElementById('quantity-3').value); return false;">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cart-items"></div>
+                    <h5>Total: $<span id="total-price">0.00</span></h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="clearCart()">Clear Cart</button>
+                    <button type="button" class="btn btn-primary" onclick="showInvoice()">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceModalLabel">Invoice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="invoice-items"></div>
+                    <h5>Total Amount: $<span id="invoice-total">0.00</span></h5>
+                    <div class="mb-3">
+                        <label for="client-name" class="form-label">Client Name</label>
+                        <input type="text" id="client-name" class="form-control" placeholder="Enter your name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="client-phone" class="form-label">Phone Number</label>
+                        <input type="text" id="client-phone" class="form-control" placeholder="Enter your phone number">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadInvoice()">Download PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(id, name, price, quantity) {
+            const qty = parseInt(quantity);
+            const itemTotal = price * qty;
+            cart.push({ id, name, price, quantity: qty });
+            total += itemTotal;
+            document.getElementById('cart-count').innerText = cart.length;
+            updateCart();
+            alert(`${name} (x${qty}) has been added to your cart!`);
+        }
+
+        function updateCart() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            cartItemsDiv.innerHTML = '';
+            cart.forEach((item, index) => {
+                cartItemsDiv.innerHTML += `
+                    <div class="cart-item d-flex justify-content-between align-items-center">
+                        ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}
+                        <button class="btn btn-danger btn-sm" onclick="removeFromCart(${index})">Remove</button>
+                    </div>`;
+            });
+            document.getElementById('total-price').innerText = total.toFixed(2);
+        }
+
+        function removeFromCart(index) {
+            const item = cart[index];
+            total -= item.price * item.quantity;
+            cart.splice(index, 1);
+            document.getElementById('cart-count').innerText = cart.length;
+            updateCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            total = 0;
+            document.getElementById('cart-count').innerText = 0;
+            updateCart();
+        }
+
+        function showInvoice() {
+            const invoiceItemsDiv = document.getElementById('invoice-items');
+            invoiceItemsDiv.innerHTML = '';
+            cart.forEach(item => {
+                invoiceItemsDiv.innerHTML += `
+                    <div class="invoice-item d-flex justify-content-between align-items-center">
+                        ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}
+                    </div>`;
+            });
+            document.getElementById('invoice-total').innerText = total.toFixed(2);
+            const invoiceModal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+            invoiceModal.show();
+        }
+
+        function downloadInvoice() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const clientName = document.getElementById('client-name').value;
+            const clientPhone = document.getElementById('client-phone').value;
+
+            doc.setFontSize(20);
+            doc.text("Invoice", 14, 22);
+            doc.setFontSize(12);
+            doc.text(`Client Name: ${clientName}`, 14, 40);
+            doc.text(`Phone Number: ${clientPhone}`, 14, 50);
+            doc.text("Items:", 14, 60);
+
+            let y = 70;
+            cart.forEach(item => {
+                doc.text(`${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`, 14, y);
+                y += 10;
+            });
+
+            doc.text(`Total Amount: $${total.toFixed(2)}`, 14, y);
+            doc.save('invoice.pdf');
+        }
+
+        function filterProducts() {
+            const input = document.getElementById('search-input').value.toLowerCase();
+            const productItems = document.querySelectorAll('.product-item');
+            productItems.forEach(item => {
+                const productName = item.getAttribute('data-name').toLowerCase();
+                if (productName.includes(input)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Pro E-Shop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
